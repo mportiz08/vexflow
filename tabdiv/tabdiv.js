@@ -72,7 +72,7 @@ Vex.Flow.TabDiv.prototype.init = function(sel) {
 
   // Initialize parser.
   this.parser = new Vex.Flow.VexTab();
-  this.message = "vexflow.com";
+  this.message = "";
   if (!this.message) this.extra_height = 10; else this.extra_height = 20;
   this.redraw();
 }
