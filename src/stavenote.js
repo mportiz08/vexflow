@@ -43,7 +43,7 @@ Vex.Flow.StaveNote.prototype.init = function(note_struct) {
     var key = this.keys[i];
 
     // All rests use the same position on the line.
-    if (this.glyph.rest) key = this.glyph.position;
+    // if (this.glyph.rest) key = this.glyph.position;
     var props = Vex.Flow.keyProperties(key);
     if (!props) {
       throw new Vex.RuntimeError("BadArguments",
@@ -59,7 +59,7 @@ Vex.Flow.StaveNote.prototype.init = function(note_struct) {
         this.displaced = true;
         props.displaced = true;
 
-        // Have to mark the previous note as 
+        // Have to mark the previous note as
         // displaced as well, for modifier placement
         if (this.keyProps.length > 0) {
             this.keyProps[i-1].displaced = true;
@@ -73,18 +73,25 @@ Vex.Flow.StaveNote.prototype.init = function(note_struct) {
 
   // Drawing
   this.modifiers = [];
- 
+
   this.render_options = {
     glyph_font_scale: 38, // font size for note heads and rests
     stem_height: 35,      // in pixels
     stroke_px: 3,         // number of stroke px to the left and right of head
-    stroke_spacing: 10    // spacing between strokes (TODO: take from stave)
+    stroke_spacing: 10,    // spacing between strokes (TODO: take from stave)
+    annotation_spacing: 5 // spacing above note for annotations
   }
 
   this.setStemDirection(note_struct.stem_direction);
 
   // Calculate left/right padding
   this.calcExtraPx();
+}
+
+Vex.Flow.StaveNote.prototype.getYForTopText = function(text_line) {
+  var extents = this.getStemExtents();
+  return Vex.Min(this.stave.getYForTopText(text_line),
+      extents.topY - (this.render_options.annotation_spacing * (text_line + 1)));
 }
 
 Vex.Flow.StaveNote.prototype.setStave = function(stave) {
@@ -209,6 +216,16 @@ Vex.Flow.StaveNote.prototype.addAccidental = function(index, accidental) {
   return this;
 }
 
+/* This tends to not work too well on StaveNotes.
+ * TODO(0xfe): position annotations below */
+Vex.Flow.StaveNote.prototype.addAnnotation = function(index, annotation) {
+  annotation.setNote(this);
+  annotation.setIndex(index);
+  this.modifiers.push(annotation);
+  this.setPreFormatted(false);
+  return this;
+}
+
 Vex.Flow.StaveNote.prototype.addDot = function(index) {
   var dot = new Vex.Flow.Dot();
   dot.setNote(this);
@@ -317,8 +334,11 @@ Vex.Flow.StaveNote.prototype.draw = function() {
     if (last_line == null) {
       last_line = line;
     } else {
-      if (Math.abs(last_line - line) == 0.5)
+      if (Math.abs(last_line - line) == 0.5) {
         displaced = !displaced;
+      } else {
+        displaced = false;
+      }
     }
     last_line = line;
 
