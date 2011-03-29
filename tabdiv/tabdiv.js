@@ -39,8 +39,10 @@ Vex.Flow.TabDiv.prototype.init = function(sel) {
         Vex.Flow.Renderer.Backends.RAPHAEL);
   }
 
+  this.ctx_sel = $(sel).find(".vex-canvas");
   this.renderer.resize(this.width, this.height);
   this.ctx = this.renderer.getContext();
+  this.ctx.setBackgroundFillStyle(this.ctx_sel.css("background-color"));
   this.ctx.scale(this.scale, this.scale);
 
   // Grab editor properties
@@ -66,7 +68,7 @@ Vex.Flow.TabDiv.prototype.init = function(sel) {
               that.code = that.text_area.val();
               that.redraw()
             }
-          }, 100);
+          }, 150);
     });
   }
 
@@ -111,7 +113,7 @@ Vex.Flow.TabDiv.prototype.drawInternal = function() {
   this.height = this.parser.getHeight() + this.extra_height;
   this.resize(this.width, this.height);
   this.ctx.clear();
-  this.ctx.setFont("Arial", 8, "Bold");
+  this.ctx.setFont("Arial", 10, "");
 
   for (var i = 0; i < staves.length; ++i) {
     var tabstave = staves[i].tab;
@@ -133,16 +135,16 @@ Vex.Flow.TabDiv.prototype.drawInternal = function() {
     if (notestave && tabstave) {
       Vex.Flow.Formatter.FormatAndDrawTab(
         this.ctx,
-        tabstave, notestave,
-        voice_tabnotes, 
-        voice_notes,
-        this.width - 100);
+        tabstave,
+        notestave,
+        voice_tabnotes,
+        voice_notes);
     } else if (tabstave) {
       if (voice_tabnotes) Vex.Flow.Formatter.FormatAndDraw(
-          this.ctx, tabstave, voice_tabnotes, this.width - 100);
+          this.ctx, tabstave, voice_tabnotes);
     } else if (notestave) {
       if (voice_notes) Vex.Flow.Formatter.FormatAndDraw(
-          this.ctx, notestave, voice_notes, this.width - 100);
+          this.ctx, notestave, voice_notes);
     }
 
     // Draw ties
@@ -157,7 +159,7 @@ Vex.Flow.TabDiv.prototype.drawInternal = function() {
   }
 
   if (this.message) {
-    this.ctx.setFont("Times", 10, "bold italic");
+    this.ctx.setFont("Times", 10, "italic");
     this.ctx.fillText(this.message, (this.width / 2) - 40, this.height - 10);
   }
 

@@ -25,22 +25,31 @@ Vex.Flow.Stave.prototype.init = function(x, y, width, options) {
     space_below_staff_ln: 4,  // in staff lines
     top_text_position: 1 // in staff lines
   };
+  Vex.Merge(this.options, options);
+
   this.height =
     (this.options.num_lines + this.options.space_above_staff_ln) *
     this.options.spacing_between_lines_px;
-  Vex.Merge(this.options, options);
 }
 
 Vex.Flow.Stave.prototype.setNoteStartX = function(x) {
   this.start_x = x; return this; }
 Vex.Flow.Stave.prototype.getNoteStartX = function() {
   return this.start_x; }
+Vex.Flow.Stave.prototype.getNoteEndX = function() {
+  return this.x + this.width; }
 Vex.Flow.Stave.prototype.getTieStartX = function() {
   return this.start_x; }
 Vex.Flow.Stave.prototype.getTieEndX = function() {
   return this.x + this.width; }
 Vex.Flow.Stave.prototype.setContext = function(context) {
   this.context = context; return this; }
+Vex.Flow.Stave.prototype.getX = function() {
+  return this.x;
+}
+Vex.Flow.Stave.prototype.getNumLines = function() {
+  return this.options.num_lines;
+}
 Vex.Flow.Stave.prototype.setY = function(y) {
   this.y = y; return this;
 }
@@ -87,7 +96,7 @@ Vex.Flow.Stave.prototype.getYForGlyphs = function() {
   return this.getYForLine(3);
 }
 
-Vex.Flow.Stave.prototype.addGlyph= function(glyph) {
+Vex.Flow.Stave.prototype.addGlyph = function(glyph) {
   glyph.setStave(this);
   this.glyphs.push(glyph);
   this.start_x += glyph.getMetrics().width;

@@ -26,7 +26,15 @@ Vex.Flow.RaphaelContext.prototype.init = function(element) {
   this.attributes = {
     "stroke-width": 0.3,
     "fill": "black",
-    "font": "8pt Arial"
+    "stroke": "black",
+    "font": "10pt Arial"
+  };
+
+  this.background_attributes = {
+    "stroke-width": 0,
+    "fill": "white",
+    "stroke": "white",
+    "font": "10pt Arial"
   };
 
   this.state_stack= [];
@@ -47,6 +55,12 @@ Vex.Flow.RaphaelContext.prototype.setFillStyle = function(style) {
   return this;
 }
 
+Vex.Flow.RaphaelContext.prototype.setBackgroundFillStyle = function(style) {
+  this.background_attributes.fill = style;
+  this.background_attributes.stroke = style;
+  return this;
+}
+
 Vex.Flow.RaphaelContext.prototype.setStrokeStyle = function(style) {
   this.attributes.stroke = style;
   return this;
@@ -56,6 +70,9 @@ Vex.Flow.RaphaelContext.prototype.scale = function(x, y) {
   this.state.scale = { x: x, y: y };
   this.attributes.scale = x + "," + y + ",0,0";
   this.attributes.font = this.state.font_size * this.state.scale.x + "pt " +
+    this.state.font_family;
+  this.background_attributes.scale = x + "," + y + ",0,0";
+  this.background_attributes.font = this.state.font_size * this.state.scale.x + "pt " +
     this.state.font_family;
   return this;
 }
@@ -78,6 +95,17 @@ Vex.Flow.RaphaelContext.prototype.fillRect = function(x, y, width, height) {
 
   var r = this.paper.rect(x, y, width - 0.5, height - 0.5).
     attr(this.attributes);
+  return this;
+}
+
+Vex.Flow.RaphaelContext.prototype.clearRect = function(x, y, width, height) {
+  if (height < 0) {
+    y += height;
+    height = -height
+  }
+
+  var r = this.paper.rect(x, y, width - 0.5, height - 0.5).
+    attr(this.background_attributes);
   return this;
 }
 

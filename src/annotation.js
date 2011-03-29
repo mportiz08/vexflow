@@ -23,8 +23,8 @@ Vex.Flow.Annotation.prototype.init = function(text) {
   this.text = text;
   this.font = {
     family: "Arial",
-    size: 8,
-    weight: "bold"
+    size: 10,
+    weight: ""
   };
 
   this.setWidth(Vex.Flow.textWidth(text));
@@ -47,7 +47,7 @@ Vex.Flow.Annotation.prototype.draw = function() {
   var start = this.note.getModifierStartXY(Vex.Flow.Modifier.Position.LEFT,
       this.index);
   var x = start.x - (this.getWidth() / 2) + 2;
-  var y = this.note.getYForTopText(this.text_line);
+  var y = this.note.getYForTopText(this.text_line) - 1;
 
   this.context.save();
   this.context.setFont(this.font.family, this.font.size, this.font.weight);

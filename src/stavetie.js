@@ -42,7 +42,7 @@ Vex.Flow.StaveTie.prototype.init = function(notes, text) {
       last_x_shift: 0,
       y_shift: 3,
       tie_spacing: 0,
-      font: { family: "Arial", size: 8, style: "bold" }
+      font: { family: "Arial", size: 10, style: "" }
     };
 
   this.font = this.render_options.font;
@@ -132,7 +132,7 @@ Vex.Flow.StaveTie.prototype.renderText = function(first_x_px, last_x_px) {
   this.context.setFont(this.font.family, this.font.size, this.font.style);
   this.context.fillText(
       this.text, center_x + this.render_options.text_shift_x,
-      (this.first_note || this.last_note).getStave().getYForTopText());
+      (this.first_note || this.last_note).getStave().getYForTopText() - 1);
   this.context.restore();
 }
 
