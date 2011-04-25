@@ -41,6 +41,8 @@
   <script src="../src/keysignature.js"></script>
   <script src="../src/timesignature.js"></script>
   <script src="../src/clef.js"></script>
+  <script src="../src/music.js"></script>
+  <script src="../src/keymanager.js"></script>
   <script src="../src/renderer.js"></script>
   <script src="../src/raphaelcontext.js"></script>
 
@@ -66,7 +68,7 @@
   <script>
     /* Take raw javascript code, and return moderately useful HTML */
     function prettify_code(code) {
-      var lines = code.split("\n");
+      var lines = code.split(/\r\n|\n|\r/);
       var new_lines = [];
       for (var j = 0; j < lines.length; ++j) {
         code = lines[j];
